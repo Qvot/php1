@@ -53,3 +53,37 @@
 			.	plural( date('i'), [ 'минута', 'минуты', 'минут' ] )
 		;
 	}
+	
+	
+	function math_plus( $arg1, $arg2 ){
+		return $arg1 + $arg2;
+	}
+	function math_minus( $arg1, $arg2 ){
+		return $arg1 - $arg2;
+	}
+	function math_multiplication( $arg1, $arg2 ){
+		return $arg1 * $arg2;
+	}
+	function math_division( $arg1, $arg2 ){
+		return $arg1 / $arg2;
+	}
+	
+	function math_operation( $arg1, $arg2, $operation ){
+		switch( $operation ):
+			case 'plus':
+				$result = math_plus( $arg1, $arg2 );
+				break;
+			case 'minus':
+				$result = math_minus( $arg1, $arg2 );
+				break;
+			case 'multiplication':
+				$result = math_multiplication( $arg1, $arg2 );
+				break;
+			case 'division':
+				$result = math_division( $arg1, $arg2 );
+				break;
+		endswitch;
+		
+		return $result;
+	}
+	
