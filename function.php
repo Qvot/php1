@@ -65,6 +65,9 @@
 		return $arg1 * $arg2;
 	}
 	function math_division( $arg1, $arg2 ){
+		if( 0 == $arg2 ){
+			return 'На ноль делить нельзя!';
+		}
 		return $arg1 / $arg2;
 	}
 	
