@@ -107,15 +107,15 @@
 		do{
 			if( 0 == $i ){
 				$result[] = $i . ' - ноль.';
+			}elseif( 0 == $i%2 ){
+				$result[] = $i . ' - четное число.';
 			}else{
-				if( 0 == $i%2 ){
-					$result[] = $i . ' - четное число.';
-				}else{
-					$result[] = $i . ' - нечетное число.';
-				}
+				$result[] = $i . ' - нечетное число.';
 			}
+			
 			$i++;
 		}while( $numb >= $i );
+		
 		return implode( '<br>', $result );
 	}
 	
