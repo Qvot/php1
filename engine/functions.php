@@ -29,4 +29,19 @@ function render($file, $variables = [])
 	return $templateContent;
 }
 
-
+function gallery( $img_dir ){
+	
+	$images = scandir( WWW_DIR . $img_dir . '/' );
+#	var_dump( $images );
+	$gallery = '';
+	foreach( $images as $image ){
+		if( $image == '.' || $image == '..' ){
+			continue;
+		}
+		$gallery .= render( TEMPLATES_DIR . 'gallery.tpl', [
+			'src' => '/img/' . $image
+		]);
+	}
+	
+	return $gallery;
+}
