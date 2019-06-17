@@ -1,4 +1,3 @@
-Скоро тут будет галлерея
-
-
-<img src="/img/1.jpg"/>
+<a href="{{SRC}}" data-fancybox="gallery" target="_blank">
+	<img src="{{SRC}}" alt="" width="150" />
+</a>
