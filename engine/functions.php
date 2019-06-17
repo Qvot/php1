@@ -31,7 +31,7 @@ function render($file, $variables = [])
 
 function gallery( $img_dir ){
 	
-	$images = scandir( WWW_DIR . $img_dir . '/' );
+	$images = scandir( WWW_DIR . $img_dir );
 #	var_dump( $images );
 	$gallery = '';
 	foreach( $images as $image ){

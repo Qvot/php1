@@ -9,5 +9,5 @@ require_once __DIR__ . '/../config/config.php';
 echo render( TEMPLATES_DIR . 'index.tpl', [
 	'title'		=> 'Галерея',
 	'h1'		=> 'Галерея',
-	'content'	=> gallery( 'img' )
+	'content'	=> gallery( 'img/' )
 ]);
