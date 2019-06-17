@@ -4,14 +4,14 @@ require_once __DIR__ . '/../config/config.php';
 
 
 
-var_dump(scandir('img'));
+#var_dump(scandir('img'));
 
 
 
-// echo render(TEMPLATES_DIR . '/index.tpl', [
-// 	'title' => 'Приветствие',
-// 	'h1' => 'Заголовок',
-// 	'content' => 'Я контент'
-// ]);
+ echo render(TEMPLATES_DIR . '/index.tpl', [
+ 	'title' => 'Приветствие',
+ 	'h1' => 'Заголовок',
+ 	'content' => 'Я контент'
+ ]);
 
 ?>
