@@ -29,18 +29,23 @@ function render($file, $variables = [])
 }
 
 
-function createGallery($imgDir) {
+function createGallery() {
 	$result = '';
+	
+	$sql	= 'SELECT * FROM `images` ORDER BY `views` DESC';
+	$images	= getAssocResult( $sql );
 
-	$images = scandir(WWW_DIR . $imgDir);
-
-
-	foreach ($images as $image) {
-		if(is_file(WWW_DIR . $imgDir . $image)) {
-			$result .= render(TEMPLATES_DIR . 'galleryItem.tpl', [
-				'src' => $imgDir . $image
-			]);
+	foreach( $images as $image ) {
+		if( ! is_file(WWW_DIR . $image['url']) ){
+			$image['url'] = 'img/no-image.jpeg';
 		}
+		$result .= render(TEMPLATES_DIR . 'galleryItem.tpl', [
+			'id'	=> $image['id'],
+			'src'	=> $image['url'],
+			'views'	=> '',#$image['views'],
+			'title'	=> $image['title']
+		]);
 	}
+	
 	return $result;
 }
