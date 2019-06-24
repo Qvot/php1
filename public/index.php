@@ -4,14 +4,18 @@ require_once __DIR__ . '/../config/config.php';
 
 
 
-#var_dump(scandir('img'));
+$result = execQuery("UPDATE `users` SET `role123` = 0");
+var_dump($result);
+die;
+
+$news = getNews();
+
+$content = renderNews($news);
 
 
 
- echo render(TEMPLATES_DIR . '/index.tpl', [
- 	'title' => 'Приветствие',
- 	'h1' => 'Заголовок',
- 	'content' => 'Я контент'
- ]);
-
-?>
+echo render(TEMPLATES_DIR . '/index.tpl', [
+	'title' => 'Новости',
+	'h1' => 'Горячие Новости',
+	'content' => $content
+]);

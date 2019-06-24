@@ -17,31 +17,35 @@ function render($file, $variables = [])
 	$templateContent = file_get_contents($file);
 
 	foreach ($variables as $key => $value) {
-		if (is_array($value)) {
+		if (!is_string($value)) {
 			continue;
 		}
 
 		$key = '{{' . strtoupper($key) . '}}';
-
 		$templateContent = str_replace($key, $value, $templateContent);
 	}
 
 	return $templateContent;
 }
 
-function gallery( $img_dir ){
+
+function createGallery() {
+	$result = '';
 	
-	$images = scandir( WWW_DIR . $img_dir );
-#	var_dump( $images );
-	$gallery = '';
-	foreach( $images as $image ){
-		if( $image == '.' || $image == '..' ){
-			continue;
+	$sql	= 'SELECT * FROM `images` ORDER BY `views` DESC';
+	$images	= getAssocResult( $sql );
+
+	foreach( $images as $image ) {
+		if( ! is_file(WWW_DIR . $image['url']) ){
+			$image['url'] = 'img/no-image.jpeg';
 		}
-		$gallery .= render( TEMPLATES_DIR . 'gallery.tpl', [
-			'src' => '/img/' . $image
+		$result .= render(TEMPLATES_DIR . 'galleryItem.tpl', [
+			'id'	=> $image['id'],
+			'src'	=> $image['url'],
+			'views'	=> '',#$image['views'],
+			'title'	=> $image['title']
 		]);
 	}
 	
-	return $gallery;
+	return $result;
 }
