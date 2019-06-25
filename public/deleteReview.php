@@ -24,8 +24,6 @@ if (isset($_POST['delete'])) {
 
 $review = getReview($id);
 
-$author = $_POST['author'] ?? $review['author'];
-$text = $_POST['text'] ?? $review['text'];
 
 
 
@@ -36,7 +34,7 @@ $text = $_POST['text'] ?? $review['text'];
 
 Удалить отзыв <?= $review['id'] ?>:
 <form method="POST">
-	Имя: <input type="text" name="author" value="<?= $author ?>"><br>
-	Комментарий: <textarea name="text"><?= $text ?></textarea><br>
+	Имя: <input type="text" name="author" value="<?= $review['author'] ?>"><br>
+	Комментарий: <textarea name="text"><?= $review['text'] ?></textarea><br>
 	<input type="submit" name="delete" value="Да, удалить." />
 </form>
