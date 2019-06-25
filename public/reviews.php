@@ -34,6 +34,7 @@ foreach ($reviews as $review) {
 	echo "<div class=\"review\">";
 	echo $review['author'] . ": " . $review['text'];
 	echo " <a href=\"editReview.php?id=" . $review['id'] . "\">Редактировать</a>";
+	echo " <a href=\"deleteReview.php?id=" . $review['id'] . "\">Удалить</a>";
 	echo "</div>";
 }
 echo "</div>";

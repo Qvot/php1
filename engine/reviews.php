@@ -31,5 +31,9 @@ function updateReview($id, $author, $text) {
 }
 
 function deleteReview($id) {
+	$db = createConnection();
+	$id = (int) $id;
+	$sql = "DELETE FROM `reviews` WHERE `id` = $id";
+	return execQuery($sql, $db);
 
 }
