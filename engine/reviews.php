@@ -1,39 +1,34 @@
 <?php
 
-
-function getReviews() {
-	$reviewsSql = "SELECT * FROM `reviews`";
-	return getAssocResult($reviewsSql);
-}
-
-function getReview($id)
+/**
+ * Получить всео отзывы
+ * @return array
+ */
+function getReviews()
 {
-	$id = (int) $id;
-	$sql = "SELECT * FROM `reviews` WHERE `id` = $id";
-	return show($sql);
+
+	$sql = "SELECT * FROM `reviews` ORDER BY `date` DESC";
+
+	return getAssocResult($sql);
 }
 
-function insertReview($author, $text) {
+/**
+ * Добавить новый отзыв
+ * @param $author
+ * @param $content
+ * @return bool
+ */
+function insertReview($author, $content)
+{
+	//Создаем подключение к БД
 	$db = createConnection();
+	//Избоавляемся от всех инъекций в $author и $content
 	$author = escapeString($db, $author);
-	$text = escapeString($db, $text);
-	$sql = "INSERT INTO `reviews`(`author`, `text`) VALUES ('$author', '$text')";
-	return execQuery($sql, $db);
-}
+	$content = escapeString($db, $content);
 
-function updateReview($id, $author, $text) {
-	$db = createConnection();
-	$id = (int) $id;
-	$author = escapeString($db, $author);
-	$text = escapeString($db, $text);
-	$sql = "UPDATE `reviews` SET `author`='$author',`text`='$text' WHERE `id` = $id";
-	return execQuery($sql, $db);
-}
+	//Генерируем SQL запрос на добавляение в БД
+	$sql = "INSERT INTO `reviews`(`author`, `comment`) VALUES ('$author', '$content')";
 
-function deleteReview($id) {
-	$db = createConnection();
-	$id = (int) $id;
-	$sql = "DELETE FROM `reviews` WHERE `id` = $id";
+	//Выпонляем запрос
 	return execQuery($sql, $db);
-
 }

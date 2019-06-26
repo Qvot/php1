@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Июн 21 2019 г., 09:00
+-- Время создания: Июн 25 2019 г., 22:17
 -- Версия сервера: 5.7.26-0ubuntu0.18.04.1
 -- Версия PHP: 7.2.19-1+ubuntu18.04.1+deb.sury.org+1
 
@@ -21,6 +21,30 @@ SET time_zone = "+00:00";
 --
 -- База данных: `geek_brains`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `baskets`
+--
+
+CREATE TABLE `baskets` (
+  `id` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
+  `amount` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `baskets`
+--
+
+INSERT INTO `baskets` (`id`, `userId`, `productId`, `amount`) VALUES
+(1, 1, 1, 21),
+(2, 1, 3, 6),
+(3, 1, 2, 7),
+(4, 1, 10, 6),
+(6, 1, 13, 2);
 
 -- --------------------------------------------------------
 
@@ -94,8 +118,8 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `description`, `price`, `image`, `dateCreate`, `dateChange`, `isActive`, `categoryId`) VALUES
-(1, 'товарчик', 'из модели', '100.33', 'img/1.jpg', '2019-03-29 06:40:16', NULL, 1, 1),
-(2, 'товар', 'из модели', '100.00', 'img/2.jpg', '2019-03-29 06:40:16', NULL, 1, 1),
+(1, 'товарчик изменен', 'стал новым', '101.00', 'img/2.jpg', '2019-03-29 06:40:16', NULL, 1, 1),
+(2, 'товар', 'из модели 22', '100.00', 'img/2.jpg', '2019-03-29 06:40:16', NULL, 1, 1),
 (3, 'товар', 'из модели', '100.00', 'img/3.jpg', '2019-03-29 06:40:16', NULL, 1, 1),
 (4, 'товар', 'из модели', '100.00', 'img/4.jpg', '2019-03-29 06:40:16', NULL, 1, 2),
 (5, 'товар', 'из модели', '100.00', 'img/5.jpg', '2019-03-29 06:40:16', NULL, 1, 2),
@@ -108,7 +132,9 @@ INSERT INTO `products` (`id`, `name`, `description`, `price`, `image`, `dateCrea
 (12, 'товар', 'из модели', '100.00', 'img/5.jpg', '2019-03-29 06:40:16', NULL, 1, 3),
 (13, 'Новый товаришка', 'из модели', '100.00', 'img/6.jpg', '2019-03-29 06:40:16', NULL, 1, 1),
 (14, 'ТоварищЪ', 'Описание', '111.00', 'img/AP7FXFTBnvg.jpg', '2019-05-16 16:07:27', NULL, 1, NULL),
-(15, 'Носок', 'Хлопок, желтые, с пальцами', '100.00', 'img/images.jpg', '2019-05-16 17:06:26', NULL, 1, NULL);
+(15, 'Носок', 'Хлопок, желтые, с пальцами', '100.00', 'img/images.jpg', '2019-05-16 17:06:26', NULL, 1, NULL),
+(16, 'Товар', 'Дескр', '111.00', '0', '2019-06-25 16:53:18', NULL, 1, NULL),
+(17, 'Товар', 'Дескр', '111.00', 'img/2.jpg', '2019-06-25 16:53:38', NULL, 1, NULL);
 
 -- --------------------------------------------------------
 
@@ -146,7 +172,9 @@ INSERT INTO `reviews` (`id`, `author`, `text`) VALUES
 (19, 'Петр', 'Могло быть и лучше'),
 (20, 'Петр', 'Могло быть и лучше'),
 (21, 'Петр', 'Могло быть и лучше'),
-(22, 'Петр', 'Могло быть и лучше');
+(22, 'Петр', 'Могло быть и лучше'),
+(23, '1', '1'),
+(24, '1', '1');
 
 -- --------------------------------------------------------
 
@@ -167,13 +195,19 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `login`, `password`, `role`) VALUES
-(1, 'admin', 'admin@admin.ru', '4297f44b13955235245b2497399d7a93', 0),
-(2, 'Иван Васильевич', 'stesnyashka_666', 'qwerty', 0),
-(3, '1', '2', '3', 0);
+(1, 'admin', 'admin@admin.ru', '4297f44b13955235245b2497399d7a93', 1),
+(2, 'Иван Васильевич', 'stesnyashka_666', '4297f44b13955235245b2497399d7a93', 0);
 
 --
 -- Индексы сохранённых таблиц
 --
+
+--
+-- Индексы таблицы `baskets`
+--
+ALTER TABLE `baskets`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `userId` (`userId`,`productId`);
 
 --
 -- Индексы таблицы `images`
@@ -212,6 +246,12 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT для таблицы `baskets`
+--
+ALTER TABLE `baskets`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
 -- AUTO_INCREMENT для таблицы `images`
 --
 ALTER TABLE `images`
@@ -227,13 +267,13 @@ ALTER TABLE `news`
 -- AUTO_INCREMENT для таблицы `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT для таблицы `reviews`
 --
 ALTER TABLE `reviews`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT для таблицы `users`
