@@ -7,6 +7,9 @@ require_once '../config/config.php';
 		$product_id = (int)$_POST['product_id'];
 		$product = getProduct( $product_id );
 		if( $product ){
+			if( $_POST['quantity'] < 1 ){
+				$_POST['quantity'] = 1;
+			}
 			$_SESSION['cart']['items'][ $product_id ]['quantity'] += (int)$_POST['quantity'];
 		}
 	#	$alert = 'Товар добавлен в корзину<br>';
