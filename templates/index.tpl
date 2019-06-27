@@ -14,6 +14,8 @@
 			<li><a href="/gallery.php">Галлерея</a></li>
 			<li><a href="/news.php">Новости</a></li>
 			<li><a href="/contacts.php">Контакты</a></li>
+			<li><a href="/cart.php">Корзина</a></li>
+			<li><a href="/profile.php">Профиль</a></li>
 		</ul>
 	</header>
 	<h1>{{H1}}</h1>

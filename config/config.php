@@ -14,9 +14,9 @@ define('IMG_DIR', 'img/');
 
 //инициализация констант для БД
 define('DB_HOST', 'localhost');
-define('DB_USER', 'geek_brains');
+define('DB_USER', 'gb');
 define('DB_PASS', '123123');
-define('DB_NAME', 'geek_brains');
+define('DB_NAME', 'gb');
 
 //подключение файлов логики
 require_once ENGINE_DIR . 'functions.php';
@@ -25,4 +25,6 @@ require_once ENGINE_DIR . 'news.php';
 require_once ENGINE_DIR . 'reviews.php';
 require_once ENGINE_DIR . 'gallery.php';
 require_once ENGINE_DIR . 'products.php';
+require_once ENGINE_DIR . 'cart.php';
+require_once ENGINE_DIR . 'login.php';
 

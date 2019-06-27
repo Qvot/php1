@@ -64,3 +64,14 @@ function loadFile($fileName, $path)
 		return 0;
 	}
 }
+
+#	https://ru.stackoverflow.com/questions/313315/Формат-кириллицы-в-printf
+function utf_8_sprintf ($format) {
+   $args = func_get_args();
+
+   for ($i = 1; $i < count($args); $i++) {
+     $args [$i] = iconv('UTF-8', 'ISO-8859-5', $args [$i]);
+   }
+
+   return iconv('ISO-8859-5', 'UTF-8', call_user_func_array('sprintf', $args));
+ }
