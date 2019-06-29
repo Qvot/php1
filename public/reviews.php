@@ -1,51 +1,56 @@
 <?php
 
-require_once __DIR__ . '/../config/config.php';
+require_once '../config/config.php';
 
-echo "<pre>";
-var_dump($_POST);
-echo "</pre>";
+//?? - заменяет isset($a) ? $a : '';
+$author = $_POST['author'] ?? '';
+$comment = $_POST['comment'] ?? '';
 
+//если есть и автор и комментарий
+if($author && $comment) {
+	//пытаемся вставить отзыв
+	$result = insertReview($author, $comment);
 
-$author = $_POST['author'] ?? null;
-$text = $_POST['text'] ?? null;
-
-if ($author && $text) {
-	if (insertReview($author, $text)) {
-		echo 'Комментарий добавлен';
+	//в случае успеха обнуляем $author и $comment
+	if ($result) {
+		echo 'Отзыв добавлен';
 		$author = '';
-		$text = '';
+		$comment = '';
 	} else {
 		echo 'Произошла ошибка';
 	}
-} elseif ($author || $text) {
-	echo "Форма не заполнена";
 }
 
 echo '<hr>';
 
-
-
-
+//Получаем список отзывов
 $reviews = getReviews();
 
-echo "<div class=\"reviews\">";
+//выводим отзывы на экран
 foreach ($reviews as $review) {
-	echo "<div class=\"review\">";
-	echo $review['author'] . ": " . $review['text'];
-	echo " <a href=\"editReview.php?id=" . $review['id'] . "\">Редактировать</a>";
-	echo " <a href=\"deleteReview.php?id=" . $review['id'] . "\">Удалить</a>";
-	echo "</div>";
+	echo '<div>';
+	echo "<div>{$review['author']}</div>";
+	echo "<div>{$review['comment']}</div>";
+	echo '</div>';
+	echo '<hr>';
 }
-echo "</div>";
+
 
 ?>
-
 <hr>
-
-Добавьте ваш отзыв:
-<form method="POST">
-	Имя: <input type="text" name="author" value="<?= $author ?>"><br>
-	Комментарий: <textarea name="text"><?= $text ?></textarea><br>
-	<input type="submit" />
+<form action="" method="POST">
+	<div>
+		<!-- атрибут value позволяет выставить значение по умолчанию -->
+		Title: <input type="text" name="author" value="<?= $author ?>">
+	</div>
+	<div>
+		comment:
+		<!-- для textarea значение по умолчанию выглядит так -->
+		<textarea name="comment" cols="30" rows="10"><?= $comment ?></textarea>
+	</div>
+	<div>
+		<input type="submit">
+	</div>
 </form>
+
+

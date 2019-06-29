@@ -1,5 +1,8 @@
 <?php
 
+//Стартуем сессию
+session_start();
+
 //инициализация констант деррикторий
 define('SITE_DIR', __DIR__ . '/../');
 define('CONFIG_DIR', SITE_DIR . 'config/');
@@ -19,8 +22,9 @@ define('DB_NAME', 'gb');
 require_once ENGINE_DIR . 'functions.php';
 require_once ENGINE_DIR . 'db.php';
 require_once ENGINE_DIR . 'news.php';
-require_once ENGINE_DIR . 'gallery.php';
 require_once ENGINE_DIR . 'reviews.php';
-require_once ENGINE_DIR . 'calculator.php';
+require_once ENGINE_DIR . 'gallery.php';
 require_once ENGINE_DIR . 'products.php';
+require_once ENGINE_DIR . 'cart.php';
+require_once ENGINE_DIR . 'login.php';
 
