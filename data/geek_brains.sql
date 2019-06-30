@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: localhost
--- Время создания: Июн 25 2019 г., 22:17
+-- Время создания: Июн 27 2019 г., 22:30
 -- Версия сервера: 5.7.26-0ubuntu0.18.04.1
 -- Версия PHP: 7.2.19-1+ubuntu18.04.1+deb.sury.org+1
 
@@ -40,11 +40,9 @@ CREATE TABLE `baskets` (
 --
 
 INSERT INTO `baskets` (`id`, `userId`, `productId`, `amount`) VALUES
-(1, 1, 1, 21),
-(2, 1, 3, 6),
-(3, 1, 2, 7),
-(4, 1, 10, 6),
-(6, 1, 13, 2);
+(1, 1, 5, 5),
+(3, 1, 2, 3),
+(4, 1, 3, 7);
 
 -- --------------------------------------------------------
 
@@ -94,6 +92,55 @@ CREATE TABLE `news` (
 INSERT INTO `news` (`id`, `title`, `content`, `date_create`) VALUES
 (1, 'Новый сайт', 'Нам удалось создать сайтик с новостями', '2019-06-17 18:26:02'),
 (2, 'Список новостей', 'Мы научились выводить новости на главной', '2019-06-17 18:31:31');
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `orderProducts`
+--
+
+CREATE TABLE `orderProducts` (
+  `id` int(11) NOT NULL,
+  `orderId` int(11) NOT NULL,
+  `productId` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `amount` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `orderProducts`
+--
+
+INSERT INTO `orderProducts` (`id`, `orderId`, `productId`, `price`, `amount`) VALUES
+(1, 1, 1, '101.00', 1),
+(2, 1, 2, '100.00', 1),
+(3, 1, 3, '100.00', 2),
+(4, 2, 4, '100.00', 9),
+(5, 3, 16, '111.00', 14);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `orders`
+--
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `address` varchar(255) NOT NULL,
+  `dateCreate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `dateChange` timestamp NULL DEFAULT NULL,
+  `status` int(11) NOT NULL DEFAULT '1' COMMENT '1 - не обработан, 2 - отменен, 3- оплачен, 4 - доставлен'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Дамп данных таблицы `orders`
+--
+
+INSERT INTO `orders` (`id`, `userId`, `address`, `dateCreate`, `dateChange`, `status`) VALUES
+(1, 1, 'zakaz', '2019-06-27 19:20:17', NULL, 1),
+(2, 1, 'tyda je', '2019-06-27 19:21:11', NULL, 1),
+(3, 1, 'домой', '2019-06-27 19:21:47', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -222,6 +269,21 @@ ALTER TABLE `news`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Индексы таблицы `orderProducts`
+--
+ALTER TABLE `orderProducts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `orderId` (`orderId`,`productId`);
+
+--
+-- Индексы таблицы `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userId` (`userId`),
+  ADD KEY `status` (`status`);
+
+--
 -- Индексы таблицы `products`
 --
 ALTER TABLE `products`
@@ -249,7 +311,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT для таблицы `baskets`
 --
 ALTER TABLE `baskets`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT для таблицы `images`
@@ -264,10 +326,22 @@ ALTER TABLE `news`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
+-- AUTO_INCREMENT для таблицы `orderProducts`
+--
+ALTER TABLE `orderProducts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT для таблицы `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT для таблицы `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT для таблицы `reviews`
@@ -279,7 +353,7 @@ ALTER TABLE `reviews`
 -- AUTO_INCREMENT для таблицы `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

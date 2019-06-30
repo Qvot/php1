@@ -4,8 +4,10 @@
 		<a href="/products/showProduct.php?id={{ID}}">
 			{{NAME}}
 		</a>
+		<a class="btn" onclick="addToCart({{ID}})">Купить</a>
 	</div>
 	<div>
 		{{DESCRIPTION}}
 	</div>
+
 </div>

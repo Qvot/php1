@@ -1,19 +1,17 @@
 <?php
 
 require_once '../config/config.php';
-//
-#echo '<pre>';
-#var_dump($_SESSION);
-#echo '</pre>';
 
-checkLogin();
+
+
+if (empty($_SESSION['login'])) {
+	header('Location: /login.php');
+}
+
+
 
 echo render(TEMPLATES_DIR . 'index.tpl', [
-	'title'		=> 'Geek Brains Site',
-	'h1'		=> 'Профиль',
-	'content'	=> render(TEMPLATES_DIR . 'profile.tpl',[
-		'login'	=> $_SESSION['login']['login'],
-		'name'	=> $_SESSION['login']['name']
-	])
+	'title' => 'Привет',
+	'h1' => 'Андрей',
+	'content' => generateMyOrdersPage(),
 ]);
-

@@ -8,8 +8,6 @@ var_dump($_FILES);
 echo '</pre>';
 
 //?? - заменяет isset($a) ? $a : '';
-
-
 $name = $_POST['name'] ?? '';
 $description = $_POST['description'] ?? '';
 $price = $_POST['price'] ?? false;
@@ -17,7 +15,7 @@ $file = $_FILES['image'] ?? [];
 
 
 if($name || $description || $price !== false) {
-	if($name && $price !== false) {
+	if($name && $description && $price !== false) {
 		//пытаемся вставить новую новость
 		$result = insertProduct($name, $description, $price, $file);
 
