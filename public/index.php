@@ -3,27 +3,19 @@
 require_once '../config/config.php';
 
 
-
-if (isset($_GET['addToCart'])) {
-	$id = $_GET['id'];
-	$cart = unserialize($_COOKIE['cart']);
-	$cart[$id] = $cart[$id] ?? 0;
-	$cart[$id]++;
-	setcookie('cart', serialize($cart));	
-}
-
-// setcookie('cart', $cart);
+#echo "<pre>";
+#var_dump($_COOKIE);
+#var_dump(array_keys($_COOKIE['cart']));
+#echo "</pre>";
 
 
-// $id = 1;
-
-
-
-
+$message = $_GET['message'] ?? '';
 
 
 echo render(TEMPLATES_DIR . 'index.tpl', [
-	'title' => 'Новости',
-	'h1' => 'Горячие новости',
-	'content' => ''
-]);
+	'title'		=> 'Новости',
+	'h1'		=> 'Горячие новости',
+	'message'	=> $message,
+	'content'	=> '',
+	
+], 'render_callback');

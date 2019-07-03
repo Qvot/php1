@@ -6,7 +6,7 @@
  * @param array $variables - массив подставляемых значений
  * @return string
  */
-function render($file, $variables = [])
+function render($file, $variables = [], $callback = null)
 {
 	//если файл не существует, выкидываем ошибку
 	if (!is_file($file)) {
@@ -27,7 +27,11 @@ function render($file, $variables = [])
 	if (empty($variables)) {
 		return $templateContent;
 	}
-
+	
+	if( function_exists($callback) ){
+		$variables = $callback( $variables );
+	}
+	
 	//проходимся по всем переменным
 	foreach ($variables as $key => $value) {
 		//преобразуе ключ из key в {{KEY}}
@@ -65,13 +69,13 @@ function loadFile($fileName, $path)
 	}
 }
 
-#	https://ru.stackoverflow.com/questions/313315/Формат-кириллицы-в-printf
-function utf_8_sprintf ($format) {
-   $args = func_get_args();
 
-   for ($i = 1; $i < count($args); $i++) {
-     $args [$i] = iconv('UTF-8', 'ISO-8859-5', $args [$i]);
-   }
-
-   return iconv('ISO-8859-5', 'UTF-8', call_user_func_array('sprintf', $args));
- }
+function indexByKey($array, $key)
+{
+	$newArray = [];
+	foreach ($array as $value) {
+		$keyValue = $value[$key];
+		$newArray[$keyValue] = $value;
+	}
+	return $newArray;
+}

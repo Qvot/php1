@@ -31,7 +31,12 @@ function error($error_text)
 //		'data' => null
 //	]);
 //	exit();
-
+	if( isset($_POST['location']) ){
+		$location = $_POST['location'] ?? '/';
+		
+		header( 'Location: ' . $location . '?message=' . $error_text );
+		exit;
+	}
 	//Вариант без json
 	echo "Ошибка: $error_text";
 	exit();
@@ -48,6 +53,13 @@ function success($data = true)
 //		'data' => $data
 //	]);
 //	exit();
+	
+	if( isset($_POST['location']) ){
+		$location = $_POST['location'] ?? '/';
+		
+		header( 'Location: ' . $location );
+		exit;
+	}
 
 	//Вариант без json
 	echo "OK";
@@ -62,7 +74,6 @@ if (empty($_POST['apiMethod'])) {
 
 //Обработка метода login
 if ($_POST['apiMethod'] === 'login') {
-
 	//Получаем логин и пароль из postData
 	$login = $_POST['postData']['login'] ?? '';
 	$password = $_POST['postData']['password'] ?? '';
@@ -89,3 +100,74 @@ if ($_POST['apiMethod'] === 'login') {
 		error('Неверная пара логин-пароль');
 	}
 }
+
+//Обработка метода addToCart
+if($_POST['apiMethod'] === 'addToCart') {
+	$id = $_POST['postData']['id'] ?? 0;
+	if(!$id) {
+		error('ID не передан');
+	}
+
+	//Получаем данные корзины
+	$cart = $_COOKIE['cart'] ?? [];
+
+	//если в корзине товара еще нет, то получаем 0
+	$count = $cart[$id] ?? 0;
+	//увеличиваем количество в корзине
+	$count++;
+
+	//устанавливаем новое куки
+	setcookie("cart[$id]", $count);
+
+	success();
+}
+
+//Обработка метода removeFromCart
+if($_POST['apiMethod'] === 'removeFromCart') {
+	$id = $_POST['postData']['id'] ?? 0;
+	if(!$id) {
+		error('ID не передан');
+	}
+
+	//удаляем товар из корзины
+	setcookie("cart[$id]", null);
+	success();
+}
+
+//Обработка метода setOrderStatusCancel
+if($_POST['apiMethod'] === 'setOrderStatusCancel') {
+	$id = $_POST['postData']['id'] ?? 0;
+	if(!$id) {
+		error('ID не передан');
+	}
+
+	setStatusOrder( $id, 2 );
+	success();
+}
+
+//Обработка метода setOrderStatusPaid
+if($_POST['apiMethod'] === 'setOrderStatusPaid') {
+	$id = $_POST['postData']['id'] ?? 0;
+	if(!$id) {
+		error('ID не передан');
+	}
+
+	setStatusOrder( $id, 3 );
+	success();
+}
+
+//Обработка метода setOrderStatusDelivery
+if($_POST['apiMethod'] === 'setOrderStatusDelivery') {
+	$id = $_POST['postData']['id'] ?? 0;
+	if(!$id) {
+		error('ID не передан');
+	}
+
+	setStatusOrder( $id, 4 );
+	success();
+}
+
+
+
+
+error('Неизвестный метод');

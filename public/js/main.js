@@ -6,8 +6,8 @@
 //Функция AJAX авторизации
 function login() {
 	//Получаем input'ы логина и пароля
-	const $login_input = $('[name="login"]');
-	const $password_input = $('[name="password"]');
+	const $login_input = $('.login');
+	const $password_input = $('.password');
 
 	//Получаем значение login и password
 	const login = $login_input.val();
@@ -20,6 +20,7 @@ function login() {
 	//Передаем туда url где будет обрабатваться API
 	//И data которое будет помещена в $_POST
 	//success - вызывается при успешном ответе от сервера
+
 	$.post({
 		url: '/api.php',
 		data: {
@@ -42,10 +43,54 @@ function login() {
 
 			//Вариан без json
 			if (data === 'OK') {
-				location.reload();
+				location.assign( '/' );
 			} else {
 				$message_field.text(data);
 			}
 		}
 	});
+}
+
+function addToCart(id) {
+	//Инициализируем поле для сообщений
+	const $message_field = $('.message');
+
+	$.post({
+		url: '/api.php',
+		data: {
+			apiMethod: 'addToCart',
+			postData: {
+				id: id
+			}
+		},
+		success: function (data) {
+			if(data === 'OK') {
+				$message_field.text('Товар добавлен в корзину');
+			} else {
+				$message_field.text(data);
+			}
+			setTimeout(function () {
+				$message_field.text('');
+			}, 1000);
+		}
+	})
+}
+
+function removeFromCart(id) {
+	$.post({
+		url: '/api.php',
+		data: {
+			apiMethod: 'removeFromCart',
+			postData: {
+				id: id
+			}
+		},
+		success: function (data) {
+			if(data === 'OK') {
+				$('[data-id="' + id + '"]').remove();
+			} else {
+				alert(data);
+			}
+		}
+	})
 }

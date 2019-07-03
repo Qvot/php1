@@ -1,6 +1,9 @@
 <div>
-	<a href="updateProduct.php?id={{ID}}">Редактировать</a>
-	<a href="deleteProduct.php?id={{ID}}">Удалить</a>
+	<form action="/api.php" method="post">
+		<input type="hidden" name="postData[id]" value="{{ID}}">
+		<input type="hidden" name="location" value="/products/cart.php">
+		<button name="apiMethod" value="addToCart" o1nclick="addToCart({{ID}}); return false;">Купить</button>
+	</form>
 </div>
 <hr>
 <div>
@@ -16,8 +19,3 @@
 	Изображение:
 	<img src="/{{IMAGE}}" alt="image-{{ID}}" style="max-width: 300px; max-height: 300px"/>
 </div>
-<form action="/cart.php" method="post">
-	<input type="hidden" name="product_id" value="{{ID}}">
-	<input type="number" name="quantity" value="1">
-	<input type="submit" name="cart_add" value="Добавить в корзину">
-</form>

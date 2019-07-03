@@ -2,67 +2,38 @@
 
 require_once __DIR__ . '/../../config/config.php';
 
-echo "<pre>";
-var_dump($_POST);
-echo "</pre>";
+#echo "<pre>";
+#var_dump($_POST);
+#echo "</pre>";
 
-
-$name			= $_POST['name'] ?? null;
-$description	= $_POST['description'] ?? null;
-$price			= $_POST['price'] ?? null;
-$image			= $_POST['image'] ?? null;
-$isActive		= $_POST['isActive'] ?? null;
-
-if ($name && $description && $price) {
-	if (insertProduct($name, $description, $price, $image, $isActive )) {
-		echo 'Продукт добавлен';
-		$name			= '';
-		$description	= '';
-		$price			= '';
-		$image			= '';
-		$isActive		= '';
-	} else {
-		echo 'Произошла ошибка';
-	}
-} elseif ($name || $description || $price) {
-	echo "Форма не заполнена";
+if( ! checkLogin( true ) ){
+	header( 'Location: /login.php' );
+	exit;
 }
 
-echo '<hr>';
+$message = $_GET['message'] ?? '';
 
-
-
-
-$products = getProducts( true );
-
-echo "<div class=\"products\">";
+$products = getProducts();
+$productsList = '';
 foreach ($products as $product) {
 	if( ! is_file(WWW_DIR . $product['image'])) {
 		$product['image'] = 'img/no-image.jpeg';
 	}
-	echo "<div class=\"product\">";
-	echo '<img src="/' . $product['image'] . '" alt="Картинка товара" style="max-width:100px">';
-	echo "<h2>" . $product['name'] . "</h2>";
-	echo "<p>" . $product['description'] . "</p>";
-	echo "<p>Цена: " . $product['price'] . "</p>";
-	echo "<p>Активность: " . ($product['isActive']?'да':'нет') . "</p>";
-	echo " <a href=\"editProduct.php?id=" . $product['id'] . "\">Редактировать</a>";
-	echo " <a href=\"deleteProduct.php?id=" . $product['id'] . "\">Удалить</a>";
-	echo "</div>";
-	echo '<hr>';
+	$productsList .= render(TEMPLATES_DIR . 'adminProductsListItem.tpl', [
+		'id'			=> $product['id'],
+		'name'			=> $product['image'],
+		'description'	=> $product['description'],
+		'price'			=> $product['price'],
+		'image'			=> $product['image'],
+	]);
 }
-echo "</div>";
 
-?>
 
-<hr>
-
-Добавьте продукт:
-<form method="POST">
-	Имя: <input type="text" name="name" value="<?= $name ?>"><br>
-	Описание: <textarea name="description"><?= $description ?></textarea><br>
-	Цена: <input type="text" name="price" value="<?= $price ?>"><br>
-	Изображение: <input type="text" name="image" value="<?= $image ?>"><br>
-	Активность: <input type="checkbox" name="isActive" value="1"<?=($isActive?' checked':'')?>><br>
-	<input type="submit" />
-</form>
+echo render(TEMPLATES_DIR . 'admin.tpl', [
+	'title'		=> 'Админь',
+	'h1'		=> 'Продукты',
+	'message'	=> $message,
+	'content'	=> render(TEMPLATES_DIR . 'adminProductsList.tpl', [
+		'list'	=> $productsList
+	])
+], 'render_callback');

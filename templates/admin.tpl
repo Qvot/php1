@@ -4,19 +4,15 @@
 	<title>{{TITLE}}</title>
 	<link rel="stylesheet" href="/css/style.css">
 	<script src="/js/jquery-3.3.1.min.js"></script>
-	<script src="/js/main.js"></script>
+	<script src="/js/admin.js"></script>
 </head>
 <body>
 	<header>
 		<ul>
 			<li><a href="/">Главная</a></li>
-			<li><a href="/products/">Продукты</a></li>
-			<li><a href="/gallery.php">Галлерея</a></li>
-			<li><a href="/news.php">Новости</a></li>
-			<li><a href="/contacts.php">Контакты</a></li>
-			<li><a href="/products/cart.php">Корзина</a></li>
-			{{ADMIN}}
-			{{PROFILE}}
+			<li><a href="/admin/products.php">Продукты</a></li>
+			<li><a href="/admin/orders.php">Заказы</a></li>
+			<li><a href="/admin/users.php">Юзеры</a></li>
 			{{LOGIN}}
 		</ul>
 	</header>
