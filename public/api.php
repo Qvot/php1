@@ -31,7 +31,12 @@ function error($error_text)
 //		'data' => null
 //	]);
 //	exit();
-
+	if( isset($_POST['location']) ){
+		$location = $_POST['location'] ?? '/';
+		
+		header( 'Location: ' . $location . '?message=' . $error_text );
+		exit;
+	}
 	//Вариант без json
 	echo "Ошибка: $error_text";
 	exit();
@@ -48,6 +53,13 @@ function success($data = true)
 //		'data' => $data
 //	]);
 //	exit();
+	
+	if( isset($_POST['location']) ){
+		$location = $_POST['location'] ?? '/';
+		
+		header( 'Location: ' . $location );
+		exit;
+	}
 
 	//Вариант без json
 	echo "OK";
@@ -119,6 +131,39 @@ if($_POST['apiMethod'] === 'removeFromCart') {
 
 	//удаляем товар из корзины
 	setcookie("cart[$id]", null);
+	success();
+}
+
+//Обработка метода setOrderStatusCancel
+if($_POST['apiMethod'] === 'setOrderStatusCancel') {
+	$id = $_POST['postData']['id'] ?? 0;
+	if(!$id) {
+		error('ID не передан');
+	}
+
+	setStatusOrder( $id, 2 );
+	success();
+}
+
+//Обработка метода setOrderStatusPaid
+if($_POST['apiMethod'] === 'setOrderStatusPaid') {
+	$id = $_POST['postData']['id'] ?? 0;
+	if(!$id) {
+		error('ID не передан');
+	}
+
+	setStatusOrder( $id, 3 );
+	success();
+}
+
+//Обработка метода setOrderStatusDelivery
+if($_POST['apiMethod'] === 'setOrderStatusDelivery') {
+	$id = $_POST['postData']['id'] ?? 0;
+	if(!$id) {
+		error('ID не передан');
+	}
+
+	setStatusOrder( $id, 4 );
 	success();
 }
 

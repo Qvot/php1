@@ -1,0 +1,12 @@
+<table>
+	<thead>
+		<tr>
+			<td>ID</td>
+			<td>Имя</td>
+			<td>Логин</td>
+			<td>Роль</td>
+			<td>Действие</td>
+		</tr>
+	</thead>
+	<tbody>{{LIST}}</tbody>
+</table>

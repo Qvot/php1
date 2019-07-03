@@ -141,7 +141,127 @@ function insertProduct($name, $description, $price, $file)
 	//выполняем запрос
 	return execQuery($sql, $db);
 }
+/**
+ * Редактирование продукта
+ * @param int $id
+ * @param string $name
+ * @param string $description
+ * @param float $price
+ * @param array $file
+ * @return bool
+ */
+function updateProduct($id, $name, $description, $price, $file)
+{
+	$uploadFile = $file && !$file['error'];
+	if($uploadFile) {
+		$fileName = loadFile('image', 'img/');
+	}
 
+
+	//создаем соединение с БД
+	$db = createConnection();
+	//Избавляемся от всех инъекций в $title и $content
+	$name = escapeString($db, $name);
+	$description = escapeString($db, $description);
+	$price = (float) $price;
+
+	//генерируем SQL добавления в БД
+
+	$sql = $uploadFile
+		? "UPDATE `products` SET `name`='$name', `description`='$description', `price`=$price, `image`='$fileName' WHERE `id` = $id"
+		: "UPDATE `products` SET `name`='$name', `description`='$description', `price`=$price WHERE `id` = $id";
+
+	//выполняем запрос
+	return execQuery($sql, $db);
+}
+
+function setStatusOrder( $id, $status ){
+	$id = (int) $id;
+
+	$sql = "UPDATE `orders` SET `status`='$status'  WHERE `id` = $id";
+	
+	//выполняем запрос
+	return execQuery($sql, $db);
+}
+
+/**
+ * Функция удаляет продукт
+ * @param int $id
+ * @return bool
+ */
+function deleteProduct($id)
+{
+	$id = (int) $id;
+
+	$sql = "DELETE FROM `products` WHERE `id` = $id";
+
+	return execQuery($sql);
+}
+
+/**
+ * Генерирует страницу всех заказов
+ * @return string
+ */
+function generateOrdersPage()
+{
+	//получаем id пользователя и и получаем все заказы пользователя
+	$orders = getAssocResult("SELECT * FROM `orders` ORDER BY dateCreate DESC");
+	
+	foreach( $orders as $order ){
+		$usersId[] = $order['userId'];
+	}
+	
+	$users = getUsers( $usersId );
+	
+	$result = '';
+	foreach ($orders as $order) {
+		$orderId = $order['id'];
+
+		//получаем продукты, которые есть в заказе
+		$products = getAssocResult("
+			SELECT * FROM `orderProducts` as op
+			JOIN `products` as p ON `p`.`id` = `op`.`productId`
+			WHERE `op`.`orderId` = $orderId
+		");
+
+		$content = '';
+		$orderSum = 0;
+		//генерируем элементы таблицы товаров в заказе
+		foreach ($products as $product) {
+			$count = $product['amount'];
+			$price = $product['price'];
+			$productSum = $count * $price;
+			$content .= render(TEMPLATES_DIR . 'orderTableRow.tpl', [
+				'name' => $product['name'],
+				'id' => $product['id'],
+				'count' => $count,
+				'price' => $price,
+				'sum' => $productSum
+			]);
+			$orderSum += $productSum;
+		}
+
+		$statuses = [
+			1 => 'Заказ не обработан',
+			2 => 'Заказ отменен',
+			3 => 'Заказ оплачен',
+			4 => 'Заказ доставлен',
+		];
+
+		//генерируем полную таблицу заказа
+		$result .= render(TEMPLATES_DIR . 'adminOrderTable.tpl', [
+			'id'			=> $orderId,
+			'dateCreate'	=> $order['dateCreate'],
+			'content'		=> $content,
+			'sum'			=> $orderSum,
+			'status'		=> $statuses[$order['status']],
+			'user_id'		=> $order['userId'],
+			'user'			=> $users[$order['userId']]['name'],
+			'address'		=> $order['address']
+		]);
+	}
+	return $result;
+}
 /**
  * Генерирует страницу моих заказов
  * @return string
@@ -150,7 +270,7 @@ function generateMyOrdersPage()
 {
 	//получаем id пользователя и и получаем все заказы пользователя
 	$userId = $_SESSION['login']['id'];
-	$orders = getAssocResult("SELECT * FROM `orders` WHERE `userId` = $userId");
+	$orders = getAssocResult("SELECT * FROM `orders` WHERE `userId` = $userId ORDER BY dateCreate DESC");
 
 	$result = '';
 	foreach ($orders as $order) {
@@ -190,6 +310,7 @@ function generateMyOrdersPage()
 		//генерируем полную таблицу заказа
 		$result .= render(TEMPLATES_DIR . 'orderTable.tpl', [
 			'id' => $orderId,
+			'dateCreate'	=> $order['dateCreate'],
 			'content' => $content,
 			'sum' => $orderSum,
 			'status' => $statuses[$order['status']]

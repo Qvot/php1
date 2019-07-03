@@ -6,8 +6,8 @@
 //Функция AJAX авторизации
 function login() {
 	//Получаем input'ы логина и пароля
-	const $login_input = $('[name="login"]');
-	const $password_input = $('[name="password"]');
+	const $login_input = $('.login');
+	const $password_input = $('.password');
 
 	//Получаем значение login и password
 	const login = $login_input.val();
@@ -43,7 +43,7 @@ function login() {
 
 			//Вариан без json
 			if (data === 'OK') {
-				location.reload();
+				location.assign( '/' );
 			} else {
 				$message_field.text(data);
 			}

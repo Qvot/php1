@@ -6,7 +6,7 @@
  * @param array $variables - массив подставляемых значений
  * @return string
  */
-function render($file, $variables = [])
+function render($file, $variables = [], $callback = null)
 {
 	//если файл не существует, выкидываем ошибку
 	if (!is_file($file)) {
@@ -27,7 +27,11 @@ function render($file, $variables = [])
 	if (empty($variables)) {
 		return $templateContent;
 	}
-
+	
+	if( function_exists($callback) ){
+		$variables = $callback( $variables );
+	}
+	
 	//проходимся по всем переменным
 	foreach ($variables as $key => $value) {
 		//преобразуе ключ из key в {{KEY}}

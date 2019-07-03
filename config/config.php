@@ -14,9 +14,9 @@ define('IMG_DIR', 'img/');
 
 //инициализация констант для БД
 define('DB_HOST', 'localhost');
-define('DB_USER', 'root');
+define('DB_USER', 'gb');
 define('DB_PASS', '123123');
-define('DB_NAME', 'geek_brains');
+define('DB_NAME', 'gb');
 
 //подключение файлов логики
 require_once ENGINE_DIR . 'functions.php';
@@ -25,6 +25,24 @@ require_once ENGINE_DIR . 'news.php';
 require_once ENGINE_DIR . 'reviews.php';
 require_once ENGINE_DIR . 'gallery.php';
 require_once ENGINE_DIR . 'products.php';
+require_once ENGINE_DIR . 'users.php';
+require_once ENGINE_DIR . 'login.php';
 // require_once ENGINE_DIR . 'cart.php';
 
 
+function render_callback( $array = [] ){
+	
+	$array['login']		= '<li><a href="/login.php">Войти</a></li>';
+	$array['profile']	= '';
+	$array['admin']		= '';
+	
+	if( checkLogin() ){
+		$array['login']		= '<li><a href="/logout.php">Выход</a></li>';
+		$array['profile']	= '<li><a href="/profile.php">Профиль</a></li>';
+		if( checkLogin(true) ){
+			$array['admin']		= '<li><a href="/admin/">Админь</a></li>';
+		}
+	}
+	
+	return $array;
+}
